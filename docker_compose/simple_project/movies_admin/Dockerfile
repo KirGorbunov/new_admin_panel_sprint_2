@@ -12,19 +12,17 @@ ENV DJANGO_SETTINGS_MODULE 'config.settings'
 COPY run_uwsgi.sh run_uwsgi.sh
 COPY requirements.txt requirements.txt
 COPY uwsgi/uwsgi.ini uwsgi.ini
-
+COPY manage.py manage.py
 
 RUN  mkdir -p /opt/app/static/ \
      && mkdir -p /opt/app/media/ \
-     && mkdir -p /opt/sqlite_to_postgres/ \
      && chmod +x run_uwsgi.sh \
      && apt update \
-     && apt -qy install build-essential \
+     && apt -y install gcc\
      && pip install --upgrade pip \
      && pip install -r requirements.txt
 
-COPY . .
-
-RUN chmod +x run_uwsgi.sh
+COPY ./config ./config
+COPY ./movies ./movies
 
 ENTRYPOINT ["./run_uwsgi.sh"]
