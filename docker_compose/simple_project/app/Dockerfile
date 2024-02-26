@@ -13,15 +13,16 @@ COPY run_uwsgi.sh run_uwsgi.sh
 COPY requirements.txt requirements.txt
 COPY uwsgi/uwsgi.ini uwsgi.ini
 
-RUN  mkdir -p /var/www/static/ \
-     && mkdir -p /var/www/media/ \
-     && mkdir -p /opt/app/static/ \
+RUN  mkdir -p /opt/app/static/ \
      && mkdir -p /opt/app/media/ \
+     && mkdir -p /opt/app/static/data/ \
+     && apt update \
+     && apt -y install gcc\
      && pip install --upgrade pip \
      && pip install -r requirements.txt
 
 COPY . .
 
 EXPOSE 8000
-
-ENTRYPOINT ["uwsgi", "--strict", "--ini", "uwsgi.ini"]
+RUN chmod +x run_uwsgi.sh
+ENTRYPOINT ["./run_uwsgi.sh"]

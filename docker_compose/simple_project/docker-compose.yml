@@ -1,17 +1,48 @@
 version: '3'
+
 services:
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./db-init-script:/docker-entrypoint-initdb.d
+    env_file:
+      - .env
+    expose:
+      - 5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U app -d movies_database" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   service:
-    build: app
+    build: movies_admin
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
     expose:
       - "8000"
+    volumes:
+      - static-volume:/opt/app/static
+      - media-volume:/opt/app/media
+      - ./sqlite_to_postgres:/opt/sqlite_to_postgres
 
   nginx:
     image: nginx:latest
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./configs:/etc/nginx/conf.d:ro
-      - ./data:/data/:ro
+      - static-volume:/opt/app/static:ro
+      - media-volume:/opt/app/media:ro
     depends_on:
       - service
     ports:
       - "80:80"
+
+volumes:
+  static-volume:
+  media-volume:
