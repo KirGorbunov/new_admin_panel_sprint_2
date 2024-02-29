@@ -9,21 +9,21 @@ from movies.models import Filmwork
 
 class MoviesApiMixin:
     model = Filmwork
-    http_method_names = ['get']
+    http_method_names = ["get"]
 
     def get_queryset(self):
-        return Filmwork.objects.prefetch_related('genres', 'persons') \
+        return Filmwork.objects.prefetch_related("genres", "persons") \
             .values("id", "title", "description", "creation_date", "rating", "type") \
             .annotate(genres=ArrayAgg("genres__name", distinct=True),
                       actors=ArrayAgg("persons__full_name",
                                       distinct=True,
-                                      filter=Q(personfilmwork__role='actor')),
+                                      filter=Q(personfilmwork__role="actor")),
                       directors=ArrayAgg("persons__full_name",
                                          distinct=True,
-                                         filter=Q(personfilmwork__role='director')),
+                                         filter=Q(personfilmwork__role="director")),
                       writers=ArrayAgg("persons__full_name",
                                        distinct=True,
-                                       filter=Q(personfilmwork__role='writer')))
+                                       filter=Q(personfilmwork__role="writer")))
 
     def render_to_response(self, context, **response_kwargs):
         return JsonResponse(context)
@@ -40,24 +40,24 @@ class MoviesListApi(MoviesApiMixin, BaseListView):
         )
 
         if not page.has_previous():
-            return {'count': paginator.count,
-                    'total_pages': paginator.num_pages,
-                    'prev': None,
-                    'next': page.next_page_number(),
-                    'results': list(queryset)}
+            return {"count": paginator.count,
+                    "total_pages": paginator.num_pages,
+                    "prev": None,
+                    "next": page.next_page_number(),
+                    "results": list(queryset)}
 
         elif not page.has_next():
-            return {'count': paginator.count,
-                    'total_pages': paginator.num_pages,
-                    'prev': page.previous_page_number(),
-                    'next': None,
-                    'results': list(queryset)}
+            return {"count": paginator.count,
+                    "total_pages": paginator.num_pages,
+                    "prev": page.previous_page_number(),
+                    "next": None,
+                    "results": list(queryset)}
         else:
-            return {'count': paginator.count,
-                    'total_pages': paginator.num_pages,
-                    'prev': page.previous_page_number(),
-                    'next': page.next_page_number(),
-                    'results': list(queryset)}
+            return {"count": paginator.count,
+                    "total_pages": paginator.num_pages,
+                    "prev": page.previous_page_number(),
+                    "next": page.next_page_number(),
+                    "results": list(queryset)}
 
 
 class MoviesDetailApi(MoviesApiMixin, BaseDetailView):

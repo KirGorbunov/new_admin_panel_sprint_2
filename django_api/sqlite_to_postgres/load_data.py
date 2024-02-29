@@ -12,7 +12,7 @@ from dataclasses_storage import (FilmWork, Genre, GenreFilmWork, Person,
 from psycopg2.extensions import connection as _connection
 from psycopg2.extras import DictCursor, execute_values
 
-logging.config.fileConfig(os.path.dirname(os.path.realpath(__file__))+'/logger.conf')
+logging.config.fileConfig(os.path.dirname(os.path.realpath(__file__))+"/logger.conf")
 
 
 class PostgresSaver:
@@ -25,7 +25,7 @@ class PostgresSaver:
         try:
             cursor.execute(f"SELECT * FROM {db_dataclass.table_name} LIMIT 0")
             column_names = [desc[0] for desc in cursor.description]
-            self.column_names_str = ','.join(column_names)
+            self.column_names_str = ",".join(column_names)
         except Exception:
             logging.exception(f"Error retrieving column names from {db_dataclass.table_name} table Postgres database")
             sys.exit(1)
@@ -38,8 +38,8 @@ class PostgresSaver:
         try:
             data = [astuple(movie) for movie in data]
             query = (
-                f'INSERT INTO {db_dataclass.table_name} ({self.column_names_str}) VALUES %s'
-                f'ON CONFLICT (id) DO NOTHING'
+                f"INSERT INTO {db_dataclass.table_name} ({self.column_names_str}) VALUES %s"
+                f"ON CONFLICT (id) DO NOTHING"
             )
             execute_values(cursor, query, data)
             self.connect.commit()
@@ -82,16 +82,16 @@ def load_from_sqlite(connection: sqlite3.Connection, pg_conn: _connection, bd_da
         postgres_saver.save_all_data(*data)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     n = 10
     file_sqlite_db_path = os.path.dirname(os.path.realpath(__file__))+"/db.sqlite"
     dsl = {
-        'dbname': os.environ.get('POSTGRES_DB'),
-        'user': os.environ.get('POSTGRES_USER'),
-        'password': os.environ.get('POSTGRES_PASSWORD'),
-        'host': os.environ.get('DB_HOST', '127.0.0.1'),
-        'port': os.environ.get('DB_PORT', 5432),
-        'options': '-c search_path=content'
+        "dbname": os.environ.get("POSTGRES_DB"),
+        "user": os.environ.get("POSTGRES_USER"),
+        "password": os.environ.get("POSTGRES_PASSWORD"),
+        "host": os.environ.get("DB_HOST", "127.0.0.1"),
+        "port": os.environ.get("DB_PORT", 5432),
+        "options": "-c search_path=content"
     }
 
     try:

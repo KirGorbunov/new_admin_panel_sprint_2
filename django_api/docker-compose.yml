@@ -12,7 +12,7 @@ services:
     expose:
       - 5432
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U app -d movies_database" ]
+      test: [ 'CMD-SHELL', 'pg_isready -U app -d movies_database' ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -25,7 +25,7 @@ services:
     env_file:
       - .env
     expose:
-      - "8000"
+      - '8000'
     volumes:
       - static-volume:/opt/app/static
       - media-volume:/opt/app/media
@@ -41,7 +41,7 @@ services:
     depends_on:
       - service
     ports:
-      - "80:80"
+      - '80:80'
 
 volumes:
   static-volume:
