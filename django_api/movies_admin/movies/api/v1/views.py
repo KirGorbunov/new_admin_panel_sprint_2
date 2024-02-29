@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import Q
 from django.http import JsonResponse
@@ -30,7 +31,7 @@ class MoviesApiMixin:
 
 
 class MoviesListApi(MoviesApiMixin, BaseListView):
-    paginate_by = 50
+    paginate_by = settings.PAGINATE_BY
 
     def get_context_data(self, *, object_list=None, **kwargs):
         queryset = self.get_queryset()

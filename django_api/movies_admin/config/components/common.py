@@ -1,7 +1,7 @@
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = os.environ.get("DEBUG", False) == "True"
-ALLOWED_HOSTS = ["127.0.0.1"]
+ALLOWED_HOSTS = [os.environ.get("ALLOWED_HOSTS")]
 INTERNAL_IPS = ["127.0.0.1"]
 
 # Application definition
@@ -89,3 +89,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOCALE_PATHS = ["movies/locale"]
 
 CONN_MAX_AGE = 60
+
+PAGINATE_BY = os.environ.get("PAGINATE_BY")
