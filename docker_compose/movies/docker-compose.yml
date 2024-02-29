@@ -9,8 +9,6 @@ services:
       - ./db-init-script:/docker-entrypoint-initdb.d
     env_file:
       - .env
-    expose:
-      - 5432
     healthcheck:
       test: [ 'CMD-SHELL', 'pg_isready -U app -d movies_database' ]
       interval: 10s
@@ -19,17 +17,15 @@ services:
 
   service:
     build: movies_admin
-    depends_on:
-      db:
-        condition: service_healthy
     env_file:
       - .env
-    expose:
-      - '8000'
     volumes:
       - static-volume:/opt/app/static
       - media-volume:/opt/app/media
       - ./sqlite_to_postgres:/opt/sqlite_to_postgres
+    depends_on:
+      db:
+        condition: service_healthy
 
   nginx:
     image: nginx:1.25.4
