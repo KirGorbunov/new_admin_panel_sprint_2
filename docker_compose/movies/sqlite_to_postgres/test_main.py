@@ -10,10 +10,10 @@ from psycopg2.extras import DictCursor
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 file_sqlite_db_path = os.path.join(BASE_DIR, "db.sqlite")
 dsl = {
-    'dbname': 'movies_database',
-    'user': 'app', 'password': '123qwe',
-    'host': 'localhost', 'port': 5432,
-    'options': '-c search_path=content'
+    "dbname": "movies_database",
+    "user": "app", "password": "123qwe",
+    "host": "localhost", "port": 5432,
+    "options": "-c search_path=content"
 }
 
 
@@ -65,7 +65,7 @@ def get_all_sqllite(file_sqlite_db_path: str):
         sqlite_conn.row_factory = lambda cursor, row: list(row)
         for bd_dataclass in [FilmWork, Genre, Person, GenreFilmWork, PersonFilmWork]:
             cursor = sqlite_conn.cursor()
-            fields = ','.join(bd_dataclass.field_name_sqlite)
+            fields = ",".join(bd_dataclass.field_name_sqlite)
             query = f"SELECT {fields} FROM {bd_dataclass.table_name};"
             cursor.execute(query)
             sqlite_table_all = cursor.fetchall()
@@ -78,7 +78,7 @@ def get_all_postgres(dsl):
     with psycopg2.connect(**dsl, cursor_factory=DictCursor) as pg_conn:
         for bd_dataclass in [FilmWork, Genre, Person, GenreFilmWork, PersonFilmWork]:
             cursor = pg_conn.cursor()
-            fields = ','.join(bd_dataclass.field_name_postgres)
+            fields = ",".join(bd_dataclass.field_name_postgres)
             query = f"SELECT {fields} FROM {bd_dataclass.table_name};"
             cursor.execute(query)
             postgres_table_all = cursor.fetchall()

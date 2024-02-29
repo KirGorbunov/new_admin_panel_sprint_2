@@ -1,4 +1,4 @@
-FROM python:3.12
+FROM python:3.12-bullseye
 
 WORKDIR /opt/app
 
@@ -25,4 +25,4 @@ RUN  mkdir -p /opt/app/static/ \
 COPY ./config ./config
 COPY ./movies ./movies
 
-ENTRYPOINT ["./run_uwsgi.sh"]
+ENTRYPOINT ['./run_uwsgi.sh']
