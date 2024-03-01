@@ -30,8 +30,8 @@ services:
   nginx:
     image: nginx:1.25.4
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./configs:/etc/nginx/conf.d:ro
+      - ./configs/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./configs/site.conf:/etc/nginx/conf.d/site.conf:ro
       - static-volume:/opt/app/static:ro
       - media-volume:/opt/app/media:ro
     depends_on:
